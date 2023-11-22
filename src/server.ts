@@ -1,16 +1,16 @@
-import app from "./app";
-import config from "./app/config";
-import mongoose from "mongoose";
+import app from './app';
+import config from './app/config';
+import mongoose from 'mongoose';
 
 async function main() {
   try {
     await mongoose.connect(config.database_url as string);
 
     app.listen(config.port, () => {
-      console.log(`Express server running on port ${config.port}`);
+      console.log(`Express server running on port: ${config.port}`);
     });
   } catch (error) {
-    console.error("Error starting the server:", error);
+    console.error('Error starting the server:', error);
   }
 }
 
