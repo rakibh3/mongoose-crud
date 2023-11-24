@@ -34,10 +34,9 @@ const getSingleUserByIdFromDatabase = async (userId: string) => {
         age: 1,
         email: 1,
         address: 1,
+        orders: 1,
       },
     );
-  } else {
-    return null;
   }
 };
 
