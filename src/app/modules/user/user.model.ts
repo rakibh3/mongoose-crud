@@ -1,28 +1,43 @@
 import { Schema, model } from 'mongoose';
-import { User, UserName, UserAddress, UserOrder } from './user.interface';
+import {
+  IUser,
+  IUserName,
+  IUserAddress,
+  IUserOrder,
+  UserModel,
+} from './user.interface';
 
 // Schema for UserName
-const UserNameSchema = new Schema<UserName>({
-  firstName: { type: String, required: true },
-  lastName: { type: String, required: true },
-});
+const UserNameSchema = new Schema<IUserName>(
+  {
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+  },
+  { _id: false },
+);
 
 // Schema for UserAddress
-const UserAddressSchema = new Schema<UserAddress>({
-  street: { type: String, required: true },
-  city: { type: String, required: true },
-  country: { type: String, required: true },
-});
+const UserAddressSchema = new Schema<IUserAddress>(
+  {
+    street: { type: String, required: true },
+    city: { type: String, required: true },
+    country: { type: String, required: true },
+  },
+  { _id: false },
+);
 
 // Schema for UserOrder
-const UserOrderSchema = new Schema<UserOrder>({
-  productName: { type: String, required: true },
-  price: { type: Number, required: true },
-  quantity: { type: Number, required: true },
-});
+const UserOrderSchema = new Schema<IUserOrder>(
+  {
+    productName: { type: String, required: true },
+    price: { type: Number, required: true },
+    quantity: { type: Number, required: true },
+  },
+  { _id: false },
+);
 
 // Schema for User
-const userSchema = new Schema<User>({
+const userSchema = new Schema<IUser, UserModel>({
   userId: { type: Number, required: true },
   username: { type: String, required: true },
   password: { type: String, required: true },
@@ -35,4 +50,9 @@ const userSchema = new Schema<User>({
   orders: { type: [UserOrderSchema], default: undefined },
 });
 
-export const UserModel = model<User>('User', userSchema);
+userSchema.statics.isUserExists = async function (userId: string) {
+  const exixtingUser = await User.findOne({ userId });
+  return exixtingUser;
+};
+
+export const User = model<IUser, UserModel>('User', userSchema);
