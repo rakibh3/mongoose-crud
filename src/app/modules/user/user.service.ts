@@ -41,8 +41,19 @@ const getSingleUserByIdFromDatabase = async (userId: string) => {
   }
 };
 
+// Delete a user
+const deleteUserFromDatebase = async (userId: string) => {
+  const user = await User.isUserExists(userId);
+
+  if (user) {
+    const deletionResult = await User.deleteOne({ userId });
+    return deletionResult;
+  }
+};
+
 export const UserService = {
   createUserInDatabase,
   getAllUserFromDatabase,
   getSingleUserByIdFromDatabase,
+  deleteUserFromDatebase,
 };

@@ -1,11 +1,10 @@
 import { Request, Response } from 'express';
 import { UserService } from './user.service';
 
+// Create the user in the database
 const createUser = async (req: Request, res: Response) => {
   try {
     const { userData } = req.body;
-
-    // Create the user in the database
     const createdUser = await UserService.createUserInDatabase(userData);
 
     res.status(200).json({
@@ -64,8 +63,36 @@ const getUser = async (req: Request, res: Response) => {
   }
 };
 
+// Get all users from database
+const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId;
+    const deleteUser = await UserService.deleteUserFromDatebase(userId);
+
+    if (deleteUser?.deletedCount) {
+      res.status(200).json({
+        success: true,
+        message: 'User deleted successfully!',
+        data: null,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 export const UserController = {
   createUser,
   getAllUsers,
   getUser,
+  deleteUser,
 };
