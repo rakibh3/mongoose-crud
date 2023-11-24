@@ -3,7 +3,10 @@ import { User } from './user.model';
 
 // Function to create a user in the database
 const createUserInDatabase = async (userData: IUser) => {
-  const createdUser = await User.create(userData);
+  const newUserWithPasswordInfo = await User.create(userData);
+  const createdUser = await User.findById(newUserWithPasswordInfo._id).select(
+    '-password',
+  );
   return createdUser;
 };
 
