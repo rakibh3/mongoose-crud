@@ -1,4 +1,6 @@
 import { Schema, model } from 'mongoose';
+import bcrypt from 'bcrypt';
+import config from '../../config';
 import {
   IUser,
   IUserName,
@@ -61,10 +63,17 @@ const userSchema = new Schema<IUser, UserModel>({
   orders: { type: [UserOrderSchema] },
 });
 
-// // Pre save middleware
-// userSchema.pre('save', function () {
-//   console.log(this, 'Pre Hook');
-// });
+// Pre save middleware
+userSchema.pre('save', async function (next) {
+  // Hashing password
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
+  const user = this;
+  user.password = await bcrypt.hash(
+    user.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  next();
+});
 
 userSchema.statics.isUserExists = async function (userId: string) {
   const exixtingUser = await User.findOne({ userId });
