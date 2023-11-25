@@ -107,7 +107,7 @@ const totalPriceForSpecificUser = async (req: Request, res: Response) => {
     const totalPrice =
       await OrderService.calculateTotalOrderPriceFromDatabase(userId);
 
-    // Respond with the total price or user not found error
+    // Respond with the total price or user not found
     if (totalPrice) {
       res.status(200).json({
         success: true,
