@@ -28,7 +28,30 @@ const getUserOrdersFromDatabase = async (userId: string) => {
   }
 };
 
+// Function for calculate price of orders for specific user
+const calculateTotalOrderPriceFromDatabase = async (userId: string) => {
+  const user = await User.isUserExists(userId);
+
+  if (user) {
+    const totalOrderPrice = await User.aggregate([
+      { $match: { userId: user.userId } }, // Match the user by userId
+      { $unwind: { path: '$orders' } }, // Unwind the orders array
+      {
+        $group: {
+          _id: null,
+          totalPrice: {
+            $sum: { $multiply: ['$orders.price', '$orders.quantity'] },
+          },
+        },
+      },
+      { $project: { _id: 0, totalPrice: 1 } },
+    ]);
+    return totalOrderPrice;
+  }
+};
+
 export const OrderService = {
   updateUserOrderInDatabase,
   getUserOrdersFromDatabase,
+  calculateTotalOrderPriceFromDatabase,
 };

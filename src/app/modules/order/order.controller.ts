@@ -62,7 +62,32 @@ const getUserOrder = async (req: Request, res: Response) => {
   }
 };
 
+// Get total orders price for specific user
+const totalPriceForSpecificUser = async (req: Request, res: Response) => {
+  const userId = req.params.userId;
+  const totalPrice =
+    await OrderService.calculateTotalOrderPriceFromDatabase(userId);
+
+  if (totalPrice) {
+    res.status(200).json({
+      success: true,
+      message: 'Total price calculated successfully!',
+      data: totalPrice,
+    });
+  } else {
+    res.status(500).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
+};
+
 export const OrderController = {
   updateUserOrder,
   getUserOrder,
+  totalPriceForSpecificUser,
 };
