@@ -26,7 +26,7 @@ const createUser = async (req: Request, res: Response) => {
     // Handle server errors
     res.status(500).json({
       success: false,
-      message: 'An Error Occurred On Server.',
+      message: 'An Error Occurred On Server Test.',
       error: error,
     });
   }
@@ -139,11 +139,11 @@ const deleteUser = async (req: Request, res: Response) => {
 // Update user data from database
 const updateUser = async (req: Request, res: Response) => {
   try {
-    const { userData } = req.body;
+    const { userDataForUpdate } = req.body;
 
     const userId = req.params.userId;
 
-    const userValidationResult = userValidationSchema.parse(userData);
+    const userValidationResult = userValidationSchema.parse(userDataForUpdate);
 
     const updatingData = await UserService.updateUserFromDatebase(
       userId,

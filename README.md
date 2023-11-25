@@ -58,7 +58,7 @@ PORT = 5000
 
 ### For Update Users Data Follow This :
 
-##### Use this format:
+##### Use this format when you want to update user data:
 
 ```
 {

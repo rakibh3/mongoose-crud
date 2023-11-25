@@ -5,7 +5,7 @@ import { User } from './user.model';
 const createUserInDatabase = async (userData: IUser) => {
   const newUserWithPasswordInfo = await User.create(userData);
 
-  const createdUser = await User.findById(newUserWithPasswordInfo.userId, {
+  const createdUser = await User.findById(newUserWithPasswordInfo._id, {
     password: 0,
     orders: 0,
     _id: 0,

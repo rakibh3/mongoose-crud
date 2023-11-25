@@ -61,6 +61,11 @@ const userSchema = new Schema<IUser, UserModel>({
   orders: { type: [UserOrderSchema] },
 });
 
+// // Pre save middleware
+// userSchema.pre('save', function () {
+//   console.log(this, 'Pre Hook');
+// });
+
 userSchema.statics.isUserExists = async function (userId: string) {
   const exixtingUser = await User.findOne({ userId });
   return exixtingUser;
