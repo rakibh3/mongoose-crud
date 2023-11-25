@@ -1,12 +1,32 @@
 import { Request, Response } from 'express';
 import { OrderService } from './order.service';
+import { userOrderValidationSchema } from '../user/user.validation';
 
-// Create orders for a specific id
+// Create orders for a specific user ID
 const updateUserOrder = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
     const { productName, price, quantity } = req.body;
 
+    // Validate user input using Zod schema
+    const userValidationResult = userOrderValidationSchema.safeParse({
+      productName,
+      price,
+      quantity,
+    });
+
+    // Handle invalid input
+    if (!userValidationResult.success) {
+      res.status(400).json({
+        success: false,
+        message: 'Invalid input data',
+        errors: userValidationResult.error,
+      });
+
+      return;
+    }
+
+    // Process valid input and update user order
     const order = await OrderService.updateUserOrderInDatabase(
       userId,
       productName,
@@ -14,14 +34,15 @@ const updateUserOrder = async (req: Request, res: Response) => {
       quantity,
     );
 
+    // Respond based on order creation result
     if (order) {
-      res.status(200).json({
+      res.status(201).json({
         success: true,
         message: 'Order created successfully!',
         data: null,
       });
     } else {
-      res.status(500).json({
+      res.status(400).json({
         success: false,
         message: 'User not found',
         error: {
@@ -31,16 +52,25 @@ const updateUserOrder = async (req: Request, res: Response) => {
       });
     }
   } catch (error) {
-    console.error(error);
+    // Handle server errors
+    res.status(500).json({
+      success: false,
+      message: 'An Error Occurred On Server.',
+      error: {
+        code: 500,
+        message: 'Internal Server Error',
+      },
+    });
   }
 };
 
-// Get all orders for a specific id
+// Get all orders for a specific user ID
 const getUserOrder = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
     const userOrder = await OrderService.getUserOrdersFromDatabase(userId);
 
+    // Respond with fetched orders or user not found error
     if (userOrder) {
       res.status(200).json({
         success: true,
@@ -48,7 +78,8 @@ const getUserOrder = async (req: Request, res: Response) => {
         data: userOrder,
       });
     } else {
-      res.status(500).json({
+      res.status(400).json({
+        // Handle server error
         success: false,
         message: 'User not found',
         error: {
@@ -58,29 +89,49 @@ const getUserOrder = async (req: Request, res: Response) => {
       });
     }
   } catch (error) {
-    console.error(error);
+    res.status(500).json({
+      success: false,
+      message: 'An Error Occurred On Server.',
+      error: {
+        code: 500,
+        message: 'Internal Server Error',
+      },
+    });
   }
 };
 
-// Get total orders price for specific user
+// Get total order price for a specific user ID
 const totalPriceForSpecificUser = async (req: Request, res: Response) => {
-  const userId = req.params.userId;
-  const totalPrice =
-    await OrderService.calculateTotalOrderPriceFromDatabase(userId);
+  try {
+    const userId = req.params.userId;
+    const totalPrice =
+      await OrderService.calculateTotalOrderPriceFromDatabase(userId);
 
-  if (totalPrice) {
-    res.status(200).json({
-      success: true,
-      message: 'Total price calculated successfully!',
-      data: totalPrice,
-    });
-  } else {
+    // Respond with the total price or user not found error
+    if (totalPrice) {
+      res.status(200).json({
+        success: true,
+        message: 'Total price calculated successfully!',
+        data: totalPrice,
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+  } catch (error) {
     res.status(500).json({
+      // Handle server error
       success: false,
-      message: 'User not found',
+      message: 'An Error Occurred On Server.',
       error: {
-        code: 404,
-        description: 'User not found!',
+        code: 500,
+        message: 'Internal Server Error',
       },
     });
   }
