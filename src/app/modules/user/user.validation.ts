@@ -20,14 +20,14 @@ export const userOrderValidationSchema = z.object({
 const userValidationSchema = z.object({
   userId: z.number().positive(),
   username: z.string().min(1),
-  password: z.string().min(1),
+  password: z.string().min(6).max(18),
   fullName: userNameValidationSchema,
   age: z.number().positive(),
   email: z.string().email(),
   isActive: z.boolean(),
   hobbies: z.array(z.string()),
   address: userAddressValidationSchema,
-  orders: z.array(userOrderValidationSchema),
+  orders: z.optional(z.array(userOrderValidationSchema)),
 });
 
 export default userValidationSchema;

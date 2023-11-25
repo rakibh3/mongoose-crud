@@ -4,9 +4,15 @@ import { User } from './user.model';
 // Function to create a user in the database
 const createUserInDatabase = async (userData: IUser) => {
   const newUserWithPasswordInfo = await User.create(userData);
-  const createdUser = await User.findById(newUserWithPasswordInfo._id).select(
-    '-password',
-  );
+  // const createdUser = await User.findById(newUserWithPasswordInfo._id).select(
+  //   '-password',
+  // );
+
+  const createdUser = await User.findById(newUserWithPasswordInfo._id, {
+    password: 0,
+    orders: 0,
+    _id: 0,
+  });
   return createdUser;
 };
 
@@ -14,7 +20,14 @@ const createUserInDatabase = async (userData: IUser) => {
 const getAllUserFromDatabase = async () => {
   const allUser = await User.find(
     {},
-    { _id: 0, username: 1, fullName: 1, age: 1, email: 1, address: 1 },
+    {
+      _id: 0,
+      username: 1,
+      fullName: 1,
+      age: 1,
+      email: 1,
+      address: 1,
+    },
   );
   return allUser;
 };
@@ -32,9 +45,10 @@ const getSingleUserByIdFromDatabase = async (userId: string) => {
         username: 1,
         fullName: 1,
         age: 1,
+        isActive: 1,
+        hobbies: 1,
         email: 1,
         address: 1,
-        orders: 1,
       },
     );
   }

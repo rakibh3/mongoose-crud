@@ -9,18 +9,18 @@ const updateUserOrder = async (req: Request, res: Response) => {
     const { productName, price, quantity } = req.body;
 
     // Validate user input using Zod schema
-    const userValidationResult = userOrderValidationSchema.safeParse({
+    const orderValidationResult = userOrderValidationSchema.safeParse({
       productName,
       price,
       quantity,
     });
 
     // Handle invalid input
-    if (!userValidationResult.success) {
+    if (!orderValidationResult.success) {
       res.status(400).json({
         success: false,
         message: 'Invalid input data',
-        errors: userValidationResult.error,
+        errors: orderValidationResult.error,
       });
 
       return;
