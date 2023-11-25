@@ -13,11 +13,14 @@ const createUser = async (req: Request, res: Response) => {
       data: createdUser,
     });
   } catch (error) {
-    console.error('Error creating user:', error);
-
+    // Handle server errors
     res.status(500).json({
       success: false,
-      message: 'Failed to create user. Please try again later.',
+      message: 'An Error Occurred On Server.',
+      error: {
+        code: 500,
+        message: 'Internal Server Error',
+      },
     });
   }
 };
@@ -32,7 +35,15 @@ const getAllUsers = async (req: Request, res: Response) => {
       data: allUsers,
     });
   } catch (error) {
-    console.error(error);
+    // Handle server errors
+    res.status(500).json({
+      success: false,
+      message: 'An Error Occurred On Server.',
+      error: {
+        code: 500,
+        message: 'Internal Server Error',
+      },
+    });
   }
 };
 
@@ -59,7 +70,15 @@ const getUser = async (req: Request, res: Response) => {
       });
     }
   } catch (error) {
-    console.error(error);
+    // Handle server errors
+    res.status(500).json({
+      success: false,
+      message: 'An Error Occurred On Server.',
+      error: {
+        code: 500,
+        message: 'Internal Server Error',
+      },
+    });
   }
 };
 
@@ -86,7 +105,15 @@ const deleteUser = async (req: Request, res: Response) => {
       });
     }
   } catch (error) {
-    console.error(error);
+    // Handle server errors
+    res.status(500).json({
+      success: false,
+      message: 'An Error Occurred On Server.',
+      error: {
+        code: 500,
+        message: 'Internal Server Error',
+      },
+    });
   }
 };
 
