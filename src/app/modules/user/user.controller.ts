@@ -136,9 +136,53 @@ const deleteUser = async (req: Request, res: Response) => {
   }
 };
 
+// Update user data from database
+const updateUser = async (req: Request, res: Response) => {
+  try {
+    const { userData } = req.body;
+
+    const userId = req.params.userId;
+    // console.log(userData);
+
+    // const userValidationResult = userValidationSchema.parse(userUpdateInfo);
+
+    const updatingData = await UserService.updateUserFromDatebase(
+      userId,
+      userData,
+    );
+
+    if (updatingData?.userId) {
+      res.status(200).json({
+        success: true,
+        message: 'User fetched successfully!',
+        data: updatingData,
+      });
+    } else {
+      res.status(500).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } catch (error: any) {
+    // Handle server errors
+    res.status(500).json({
+      success: false,
+      message: 'An Error Occurred On Server.',
+      error: error,
+    });
+  }
+};
+
 export const UserController = {
   createUser,
   getAllUsers,
   getUser,
+  updateUser,
   deleteUser,
 };

@@ -4,11 +4,8 @@ import { User } from './user.model';
 // Function to create a user in the database
 const createUserInDatabase = async (userData: IUser) => {
   const newUserWithPasswordInfo = await User.create(userData);
-  // const createdUser = await User.findById(newUserWithPasswordInfo._id).select(
-  //   '-password',
-  // );
 
-  const createdUser = await User.findById(newUserWithPasswordInfo._id, {
+  const createdUser = await User.findById(newUserWithPasswordInfo.userId, {
     password: 0,
     orders: 0,
     _id: 0,
@@ -64,9 +61,33 @@ const deleteUserFromDatebase = async (userId: string) => {
   }
 };
 
+// Update user info
+const updateUserFromDatebase = async (userId: string, userData: IUser) => {
+  const user = await User.isUserExists(userId);
+  // console.log(user?.userId);
+
+  if (user) {
+    const updatedUserInfo = await User.findOneAndUpdate(
+      { userId: user.userId },
+      { $set: userData },
+      { new: true },
+    );
+    // return updatedUserInfo;
+
+    const getUserInfoWithoutPassword = await User.findById(updatedUserInfo, {
+      password: 0,
+      orders: 0,
+      _id: 0,
+    });
+
+    return getUserInfoWithoutPassword;
+  }
+};
+
 export const UserService = {
   createUserInDatabase,
   getAllUserFromDatabase,
   getSingleUserByIdFromDatabase,
+  updateUserFromDatebase,
   deleteUserFromDatebase,
 };

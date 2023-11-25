@@ -55,3 +55,31 @@ PORT = 5000
     }
 }
 ```
+
+### For Update Users Data Follow This :
+
+##### Use this format:
+
+```
+{
+    "userData": {
+        "username": "rakib03",
+        "fullName": {
+            "firstName": "Md Rakibul",
+            "lastName": "Hasan"
+        },
+        "age": 25,
+        "email": "hasan@gmail.com",
+        "isActive": true,
+        "hobbies": [
+            "reading",
+            "Coding"
+        ],
+        "address": {
+            "street": "#House: 4, Len: 1, Block: A",
+            "city": "Mirpur, Dhaka",
+            "country": "Bangladesh"
+        }
+    }
+}
+```
