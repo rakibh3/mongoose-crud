@@ -142,13 +142,12 @@ const updateUser = async (req: Request, res: Response) => {
     const { userData } = req.body;
 
     const userId = req.params.userId;
-    // console.log(userData);
 
-    // const userValidationResult = userValidationSchema.parse(userUpdateInfo);
+    const userValidationResult = userValidationSchema.parse(userData);
 
     const updatingData = await UserService.updateUserFromDatebase(
       userId,
-      userData,
+      userValidationResult,
     );
 
     if (updatingData?.userId) {

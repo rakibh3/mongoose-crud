@@ -62,14 +62,17 @@ const deleteUserFromDatebase = async (userId: string) => {
 };
 
 // Update user info
-const updateUserFromDatebase = async (userId: string, userData: IUser) => {
+const updateUserFromDatebase = async (
+  userId: string,
+  userValidationResult: IUser,
+) => {
   const user = await User.isUserExists(userId);
   // console.log(user?.userId);
 
   if (user) {
     const updatedUserInfo = await User.findOneAndUpdate(
       { userId: user.userId },
-      { $set: userData },
+      { $set: userValidationResult },
       { new: true },
     );
     // return updatedUserInfo;

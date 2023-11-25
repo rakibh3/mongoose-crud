@@ -63,7 +63,9 @@ PORT = 5000
 ```
 {
     "userData": {
+        "userId": 1,
         "username": "rakib03",
+        "password": "123456789",
         "fullName": {
             "firstName": "Md Rakibul",
             "lastName": "Hasan"
