@@ -154,7 +154,7 @@ const updateUser = async (req: Request, res: Response) => {
     if (updatingData?.userId) {
       res.status(200).json({
         success: true,
-        message: 'User fetched successfully!',
+        message: 'User updated successfully!',
         data: updatingData,
       });
     } else {
