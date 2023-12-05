@@ -26,7 +26,7 @@ const createUser = async (req: Request, res: Response) => {
     // Handle server errors
     res.status(500).json({
       success: false,
-      message: 'An Error Occurred On Server Test.',
+      message: 'An Error Occurred On Server!',
       error: error,
     });
   }
