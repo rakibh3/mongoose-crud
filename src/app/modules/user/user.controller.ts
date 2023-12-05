@@ -5,7 +5,7 @@ import userValidationSchema from './user.validation';
 // Create a new user in the database
 const createUser = async (req: Request, res: Response) => {
   try {
-    const { userData } = req.body;
+    const { ...userData } = req.body;
 
     // Validate user input using the defined Zod schema
     const userValidationResult = userValidationSchema.parse(userData);
@@ -139,7 +139,7 @@ const deleteUser = async (req: Request, res: Response) => {
 // Update user data from database
 const updateUser = async (req: Request, res: Response) => {
   try {
-    const { userDataForUpdate } = req.body;
+    const { ...userDataForUpdate } = req.body;
 
     const userId = req.params.userId;
 

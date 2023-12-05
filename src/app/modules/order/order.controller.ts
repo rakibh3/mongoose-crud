@@ -112,7 +112,7 @@ const totalPriceForSpecificUser = async (req: Request, res: Response) => {
       res.status(200).json({
         success: true,
         message: 'Total price calculated successfully!',
-        data: totalPrice,
+        data: totalPrice[0],
       });
     } else {
       res.status(400).json({
